@@ -1,80 +1,68 @@
-class BinarySearhTree {
-  constructor(key = null, val, parent = null) {
-    this.key = key;
-    this.value = val;
-    this.left = null;
-    this.right = null;
-    this.parent = parent;
-  }
+const tree = new (require('./BinarySearchTree'))();
 
-  insert(key, val, parent = this) {
-    if (key == this.key) throw new Error('No duplicate keys allowed');
-    //if root node:
-    else if (this.key === null) {
-      this.key = key;
-      this.value = val;
-    } else if (key < this.key) {
-      if (this.left === null) this.left = new BinarySearhTree(key, val, parent);
-      else this.left.insert(key, val, this);
-    } else if (key > this.key) {
-      if (this.right === null)
-        this.right = new BinarySearhTree(key, val, parent);
-      else this.right.insert(key, val, this);
-    }
-  }
-  find(key) {
-    if (key == this.key) return this.value;
-    else if (key < this.key) {
-      if (this.left === null) return;
-      else return this.left.find(key);
-    } else if (key > this.key) {
-      if (this.right === null) return;
-      else return this.right.find(key);
-    }
-  }
-
-  remove(key) {
-    if (key == this.key) {
-      if (this.right && this.left) {
-
-      }
-			else if (this.left) this._replaceWith(this.left);
-    	else if (this.right) this._replaceWith(this.right);
-			else this._replaceWith(null);
-    } else {
-			if (key < this.key) this.left.remove(key);
-			else if (key > this.key) this.right.remove(key);
-    }
-  }
-
-  _replaceWith(node) {
-		if (this.parent) {
-			if (node) node.parent = this.parent;
-			if (this == this.parent.right) this.parent.right = node;
-			else if (this == this.parent.left) this.parent.left = node;
-		}
-		else {
-			const nodeKeys = ['key','value', 'left', 'right'];
-			if (node) {
-				nodeKeys.forEach(key => this[key] = node[key]);
-			}
-			else nodeKeys.forEach(key => this[key] = null);
-		}
-	}
-
-  _findMin() {
-    if (this.left === null) return this;
-    else return this.left._findMin();
-  }
+const keys = [
+  { key: 3, value: 'three' },
+  { key: 8, value: 'eight' },
+  { key: 2, value: 'two' },
+  { key: 1, value: 'one' },
+  { key: 4, value: 'four' },
+  { key: 7, value: 'seven' },
+  { key: 9, value: 'nine' },
+  { key: 0, value: 'zero' },
+  { key: 6, value: 'six' },
+  { key: 10, value: 'ten' },
+  { key: 8.5, value: 'eight.5' },
+];
+tree.insert(5, 'five');
+for (let d of keys) {
+  tree.insert(d.key, d.value);
 }
-let a = new BinarySearhTree(1, 'one');
-a.insert(2, 'two');
-a.insert(3, 'three');
-// a.insert(-4/3, {name:'minus four thirds'})
-// a.insert(0, 'zero');
-// a.insert(0.5, 'half');
-// a.insert(0.5, 'half'); throws error. Expected
-a;
-console.log(a);
-// console.log(a.find(2));
-// console.log(a.find(-4/3));
+
+// What does this do?
+function t(t) {
+  //go down the tree. If node is null you've reached the end and return 0
+  if (!t) return 0;
+  // If node is not null, add and return node's value + its children's values
+  //returns the sum of the tree
+  return tree(t.left) + t.value + tree(t.right);
+}
+
+// Height of a BST
+
+function treeHeight(node) {
+  if (node === null) return -1;
+  let Lheight = 0,
+    Rheight = 0;
+  Lheight = treeHeight(node.left);
+  Rheight = treeHeight(node.right);
+  // console.log('L', Lheight);
+  // console.log('R', Rheight);
+  return 1 + (Lheight > Rheight ? Lheight : Rheight);
+}
+
+//console.log(treeHeight(tree));
+
+// get 3rd largest node
+function _findMax(node) {
+	if (node.right === null) return node;
+	return _findMax(node.right);
+  // while (node.right !== null) {
+	// 	console.log('max',node);
+  //   node = node.right;
+  // }
+	// // console.log(node.);
+  // return node;
+}
+
+function thirdLargest(node) {
+  if (!node.right) return node;
+	const max = _findMax(node);
+	if (max.parent.left === null) return max.parent.parent;
+  return _findMax(max.parent.left);
+}
+// console.log(thirdLargest(tree));
+
+// balanced BST
+function isBalancedBST(node) {
+	if (node)
+}
